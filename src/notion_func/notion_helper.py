@@ -14,7 +14,7 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
-from notion_builders import (
+from .notion_builders import (
     format_date,
     get_date,
     get_first_and_last_day_of_month,

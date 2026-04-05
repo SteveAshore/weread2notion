@@ -8,7 +8,7 @@ import os
 import re
 import requests
 import base64
-from notion_db_prop_config import (
+from .notion_db_prop_config import (
     RICH_TEXT,
     URL,
     RELATION,
