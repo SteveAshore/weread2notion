@@ -89,36 +89,35 @@ def parse_read_info(read_info):
         return {}
     
     extracted = {}
-    for read_data in read_info:
-        read_book_id = read_data.get("bookId")
-        if not read_book_id:
-            continue
-        read_book_data = read_data.get("book", {})
-        readingTime = read_book_data.get("readingTime")
-        readingProgress = read_book_data.get("progress")
-        finishTime = read_book_data.get("finishTime")
-        isStartReading = read_book_data.get("isStartReading", 0)
-        startReadingTime = read_book_data.get("startReadingTime")
-        updateTime = read_book_data.get("updateTime")
-        if finishTime:
-            markedStatus = 4   # 已读完
-            totalReadDay = notion_builders.get_days_between(startReadingTime, finishTime) if startReadingTime and finishTime else 0
-        elif readingTime and isStartReading:
-            markedStatus = 2   # 在读
-            totalReadDay = notion_builders.get_days_between(startReadingTime, updateTime) if startReadingTime and updateTime else 0
-        else:
-            markedStatus = 1   # 想读
-            totalReadDay = 0
+    read_book_id = read_info.get("bookId")
+    if not read_book_id:
+        return {}
+    read_book_data = read_info.get("book", {})
+    readingTime = read_book_data.get("readingTime")
+    readingProgress = read_book_data.get("progress")
+    finishTime = read_book_data.get("finishTime")
+    isStartReading = read_book_data.get("isStartReading", 0)
+    startReadingTime = read_book_data.get("startReadingTime")
+    updateTime = read_book_data.get("updateTime")
+    if finishTime:
+        markedStatus = 4   # 已读完
+        totalReadDay = notion_builders.get_days_between(startReadingTime, finishTime) if startReadingTime and finishTime else 0
+    elif readingTime and isStartReading:
+        markedStatus = 2   # 在读
+        totalReadDay = notion_builders.get_days_between(startReadingTime, updateTime) if startReadingTime and updateTime else 0
+    else:
+        markedStatus = 1   # 想读
+        totalReadDay = 0
 
-        extracted = {
-            "readingTime": readingTime,
-            "readingProgress": readingProgress,
-            "markedStatus": markedStatus,
-            "totalReadDay": totalReadDay,
-            "startReadingTime": startReadingTime,
-            "updateTime": updateTime,
-            "finishedDate": finishTime,
-        }
+    extracted = {
+        "readingTime": readingTime,
+        "readingProgress": readingProgress,
+        "markedStatus": markedStatus,
+        "totalReadDay": totalReadDay,
+        "startReadingTime": startReadingTime,
+        "updateTime": updateTime,
+        "finishedDate": finishTime,
+    }
     return extracted
 
 def should_sync_book(notion_book, read_info):
