@@ -3,7 +3,7 @@ name: weread note sync
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */2 * * *'  # 每 2 小时执行一次
+    - cron: '0 */6 * * *'  # 每 6 小时执行一次
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -51,7 +51,7 @@ jobs:
           import logging
           logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
           
-          from weread2notionpro.cookie_manager import CookieManager
+          from src.cookie_manager import CookieManager
           import sys
           manager = CookieManager()
           cookies = manager.get_cookies()
@@ -80,7 +80,7 @@ jobs:
           
           try:
               print('🚀 开始同步书架...')
-              from weread2notionpro.book_copy import main
+              from src.bookdata_sync import main
               main()
               print('✅ 书架同步完成')
           except Exception as e:
