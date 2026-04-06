@@ -65,6 +65,8 @@ def merge_shelf_and_notebook(shelf_cache, notebook_list):
                 "title": book_data.get("title"),
                 "author": book_data.get("author"),
                 "cover": book_data.get("cover"),
+                "isbn": book_data.get("isbn"),
+                "intro": book_data.get("intro"),
                 "categories": book_data.get("categories", []),
                 "newRating": book_data.get("newRating"),
                 "newRatingDetail": book_data.get("newRatingDetail"),
@@ -78,6 +80,7 @@ def merge_shelf_and_notebook(shelf_cache, notebook_list):
                 "reviewCount": nb.get("reviewCount", 0),
                 "bookmarkCount": nb.get("bookmarkCount", 0),
                 "sort": nb.get("sort", 0),
+                "_from_notebook": True,  # 标记来源
             }
     return merged
 
@@ -234,7 +237,7 @@ def create_book_page(book_id, book_data, notion_helper, weread_api):
         "BookId": notion_builders.get_rich_text(book_id),
         "ISBN": notion_builders.get_rich_text(book_data.get("isbn", "")),
         "链接": notion_builders.get_url(weread_api.get_url(book_id)),
-        "Sort": notion_builders.get_number(book_data.get("sort", 0)),
+        "Sort": notion_builders.get_number(book_data.get("sort")),
         "评分": notion_builders.get_number(book_data.get("newRating", 0)) if book_data.get("newRating") else None,
         "封面": notion_builders.get_icon(book_data.get("cover")),
         "阅读状态": notion_builders.get_select(book_data.get("阅读状态")),
@@ -340,7 +343,7 @@ def main():
     notebook_list_top5 = notebook_list[:5]
     
     # 合并数据
-    all_books = merge_shelf_and_notebook(shelf_cache, notebook_list_top5)
+    all_books = merge_shelf_and_notebook(shelf_cache_top5, notebook_list_top5)
     print(f"  ✓ 合并后书籍: {len(all_books)} 本")
     
     # 处理书架分类（bookshelf 为 booksAndArchives 列表，archive 项为列表中的对象）
