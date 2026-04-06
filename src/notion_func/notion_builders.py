@@ -203,7 +203,7 @@ def get_number(number):
     :param number: 数字
     :return: 数字属性
     """
-    return {"select": {"name": number}}
+    return {"number": number}
 
 def get_file(url):
     """

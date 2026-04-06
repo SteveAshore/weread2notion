@@ -237,7 +237,7 @@ def create_book_page(book_id, book_data, notion_helper, weread_api):
         "BookId": notion_builders.get_rich_text(book_id),
         "ISBN": notion_builders.get_rich_text(book_data.get("isbn", "")),
         "链接": notion_builders.get_url(weread_api.get_url(book_id)),
-        "Sort": notion_builders.get_number(book_data.get("sort")),
+        "Sort": notion_builders.get_number(book_data.get("sort", 0)),
         "评分": notion_builders.get_number(book_data.get("newRating", 0)) if book_data.get("newRating") else None,
         "封面": notion_builders.get_icon(book_data.get("cover")),
         "阅读状态": notion_builders.get_select(book_data.get("阅读状态")),
