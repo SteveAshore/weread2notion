@@ -117,6 +117,7 @@ def parse_read_info(read_info):
         "startReadingTime": startReadingTime,
         "updateTime": updateTime,
         "finishedDate": finishTime,
+        "summary": read_book_data.get("summary") or None,
     }
     return extracted
 
@@ -324,13 +325,22 @@ def main():
     bookshelf = weread_api.get_bookshelf()
     shelf_cache = build_shelf_cache(bookshelf)
     print(f"  ✓ 书架书籍: {len(shelf_cache)} 本")
+    shelf_cache_top5 = {}
+    # 取书架书籍的前5本: TODO
+    for k, v in shelf_cache.items():
+        shelf_cache_top5[k] = v
+        print(f"[{k}] raw book data: {v}")
+        if len(shelf_cache_top5) >= 5:
+            break
     
     print("\n[2/4] 获取笔记本数据...")
     notebook_list = weread_api.get_notebooklist()
     print(f"  ✓ 笔记本书籍: {len(notebook_list)} 本")
+    # 取笔记本书籍的前5本
+    notebook_list_top5 = notebook_list[:5]
     
     # 合并数据
-    all_books = merge_shelf_and_notebook(shelf_cache, notebook_list)
+    all_books = merge_shelf_and_notebook(shelf_cache, notebook_list_top5)
     print(f"  ✓ 合并后书籍: {len(all_books)} 本")
     
     # 处理书架分类（bookshelf 为 booksAndArchives 列表，archive 项为列表中的对象）
